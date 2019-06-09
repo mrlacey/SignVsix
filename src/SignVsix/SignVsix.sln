@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29001.49
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignVsix", "SignVsix.csproj", "{8994123C-57AF-4863-A73C-081C103823AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8994123C-57AF-4863-A73C-081C103823AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8994123C-57AF-4863-A73C-081C103823AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8994123C-57AF-4863-A73C-081C103823AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8994123C-57AF-4863-A73C-081C103823AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D608BFE8-483C-44DE-B19B-1A87F7C74493}
+	EndGlobalSection
+EndGlobal
