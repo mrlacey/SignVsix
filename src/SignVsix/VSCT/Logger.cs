@@ -21,6 +21,8 @@ internal static class Logger
 
     public static void Log(object message)
     {
+        ThreadHelper.ThrowIfNotOnUIThread();
+
         try
         {
             if (EnsurePane())
@@ -36,6 +38,8 @@ internal static class Logger
 
     private static bool EnsurePane()
     {
+        ThreadHelper.ThrowIfNotOnUIThread();
+
         if (_pane == null)
         {
             Guid guid = Guid.NewGuid();

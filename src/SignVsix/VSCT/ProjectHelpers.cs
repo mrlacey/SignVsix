@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using EnvDTE80;
+using Microsoft;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -24,10 +26,13 @@ namespace SignVsix.VSCT
         {
             _serviceProvider = serviceProvider;
             DTE = await serviceProvider.GetServiceAsync(typeof(DTE)) as DTE2;
+            Assumes.Present(DTE);
         }
 
         public static bool IsExtensibilityProject(this Project project, IVsSolution solution = null)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             if (project == null)
                 return false;
 
@@ -56,6 +61,8 @@ namespace SignVsix.VSCT
         /// <returns></returns>
         public static object GetSelectedItem()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             IntPtr hierarchyPointer, selectionContainerPointer;
             object selectedObject = null;
             IVsMultiItemSelect multiItemSelect;
@@ -84,7 +91,7 @@ namespace SignVsix.VSCT
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.Write(ex);
+                Debug.Write(ex);
             }
 
             return selectedObject;
@@ -92,6 +99,8 @@ namespace SignVsix.VSCT
 
         public static IEnumerable<Project> GetAllProjectsInSolution(IVsSolution solution = null)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             solution = solution ?? (IVsSolution)_serviceProvider.GetService(typeof(IVsSolution));
 
             foreach (IVsHierarchy hier in GetProjectsInSolution(solution))
@@ -104,6 +113,8 @@ namespace SignVsix.VSCT
 
         public static IEnumerable<IVsHierarchy> GetProjectsInSolution(IVsSolution solution)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             return GetProjectsInSolution(solution, __VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION);
         }
 
@@ -111,6 +122,8 @@ namespace SignVsix.VSCT
         {
             if (solution == null)
                 yield break;
+
+            ThreadHelper.ThrowIfNotOnUIThread();
 
             IEnumHierarchies enumHierarchies;
             Guid guid = Guid.Empty;
@@ -129,6 +142,8 @@ namespace SignVsix.VSCT
 
         public static Project GetDTEProject(IVsHierarchy hierarchy)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             if (hierarchy == null)
                 throw new ArgumentNullException(nameof(hierarchy));
 
@@ -139,6 +154,8 @@ namespace SignVsix.VSCT
 
         public static void CheckFileOutOfSourceControl(string file)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             if (!File.Exists(file) || DTE.Solution.FindProjectItem(file) == null)
                 return;
 
@@ -151,6 +168,8 @@ namespace SignVsix.VSCT
 
         public static ProjectItem AddFileToProject(this Project project, string file, string itemType = null)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             if (!File.Exists(file))
                 return null;
 
@@ -167,6 +186,8 @@ namespace SignVsix.VSCT
 
         public static void SetItemType(this ProjectItem item, string itemType)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             try
             {
                 if (item == null || item.ContainingProject == null)
@@ -182,6 +203,8 @@ namespace SignVsix.VSCT
 
         public static string GetRootFolder(this Project project)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             if (project == null || string.IsNullOrEmpty(project.FullName))
                 return null;
 
@@ -220,6 +243,8 @@ namespace SignVsix.VSCT
         ///<summary>Gets the paths to all files included in the selection, including files within selected folders.</summary>
         public static IEnumerable<string> GetSelectedFilePaths()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             return GetSelectedItemPaths()
                 .SelectMany(p => Directory.Exists(p)
                                  ? Directory.EnumerateFiles(p, "*", SearchOption.AllDirectories)
@@ -231,6 +256,8 @@ namespace SignVsix.VSCT
         ///<summary>Gets the full paths to the currently selected item(s) in the Solution Explorer.</summary>
         public static IEnumerable<string> GetSelectedItemPaths()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var items = (Array)DTE.ToolWindows.SolutionExplorer.SelectedItems;
             foreach (UIHierarchyItem selItem in items)
             {

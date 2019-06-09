@@ -86,6 +86,8 @@ namespace SignVsix.VSCT
 
         private void bttOK_Click(object sender, EventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             if (string.IsNullOrEmpty(txtPackagePath.Text) || !File.Exists(txtPackagePath.Text))
             {
                 if (!string.IsNullOrEmpty(txtPackagePath.Text) && _buildHandler != null)
@@ -156,6 +158,8 @@ namespace SignVsix.VSCT
 
         private void ShowMessageBox(string content, string title, bool success)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var shell = Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
 
             if (shell != null)

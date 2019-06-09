@@ -40,12 +40,16 @@ namespace SignVsix.VSCT
 
         private void ShowSignBinaryUI(object sender, EventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var form = new SignForm(GetPackagePath(), BuildProjectToSign);
             form.ShowDialog();
         }
 
         private void BuildProjectToSign(object sender, EventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             Solution solution = DTE.Solution;
             var project = ProjectHelpers.GetSelectedItem() as Project;
 
@@ -63,6 +67,8 @@ namespace SignVsix.VSCT
 
         private void CheckForExtensibilityPackageFlavorBeforeQueryStatus(object sender, EventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             OleMenuCommand button = (OleMenuCommand) sender;
             button.Visible = false;
             
@@ -89,6 +95,8 @@ namespace SignVsix.VSCT
 
         private string GetPackagePath()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var activeConfiguration = _project != null && _project.ConfigurationManager != null ? _project.ConfigurationManager.ActiveConfiguration : null;
             if (activeConfiguration == null)
                 return null;
